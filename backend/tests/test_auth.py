@@ -1,9 +1,4 @@
-from fastapi.testclient import TestClient
-from app.main import app
-
-client = TestClient(app)
-
-def test_user_can_register():
+def test_user_can_register(client):
     response = client.post(
         "/api/auth/register",
         json={
@@ -16,7 +11,7 @@ def test_user_can_register():
     assert response.json()["email"] == "user@example.com"
 
 
-def test_user_can_login():
+def test_user_can_login(client):
     client.post(
         "/api/auth/register",
         json={
@@ -38,7 +33,7 @@ def test_user_can_login():
     assert response.json()["token_type"] == "bearer"
 
 
-def test_login_fails_with_wrong_password():
+def test_login_fails_with_wrong_password(client):
     client.post(
         "/api/auth/register",
         json={

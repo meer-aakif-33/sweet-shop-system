@@ -1,13 +1,9 @@
-from fastapi.testclient import TestClient
-from app.main import app
-
-client = TestClient(app)
-
-def test_purchase_decreases_quantity():
+def test_purchase_decreases_quantity(client):
     client.post("/api/auth/register", json={
         "email": "buyer@test.com",
         "password": "password"
     })
+
     login = client.post("/api/auth/login", json={
         "email": "buyer@test.com",
         "password": "password"
