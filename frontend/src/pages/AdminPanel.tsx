@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/client";
+import Navbar from "../components/Navbar";
 
 type Sweet = {
   id: string;
@@ -50,7 +51,7 @@ export default function AdminPanel() {
 
   return (
     <>
-    
+          <Navbar />
     <div className="p-4 space-y-4">
       <h2 className="text-2xl font-bold">Admin Panel</h2>
 
