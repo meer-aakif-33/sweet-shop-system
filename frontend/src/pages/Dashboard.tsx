@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/client";
 import SweetCard from "../components/SweetCard";
+import Navbar from "../components/Navbar";
 
 type Sweet = {
   id: string;
@@ -54,6 +55,7 @@ export default function Dashboard() {
 
   return (
     <div className="p-4 space-y-4">
+      <Navbar />
       <h2 className="text-2xl font-bold">Available Sweets</h2>
       {sweets.length === 0 ? (
         <p>No sweets available.</p>

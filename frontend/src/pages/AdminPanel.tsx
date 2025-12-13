@@ -49,6 +49,8 @@ export default function AdminPanel() {
   };
 
   return (
+    <>
+    
     <div className="p-4 space-y-4">
       <h2 className="text-2xl font-bold">Admin Panel</h2>
 
@@ -59,13 +61,13 @@ export default function AdminPanel() {
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
           className="border p-1 w-full"
-        />
+          />
         <input
           placeholder="Category"
           value={form.category}
           onChange={(e) => setForm({ ...form, category: e.target.value })}
           className="border p-1 w-full"
-        />
+          />
         <input
           placeholder="Price"
           value={form.price}
@@ -77,11 +79,11 @@ export default function AdminPanel() {
           value={form.quantity}
           onChange={(e) => setForm({ ...form, quantity: e.target.value })}
           className="border p-1 w-full"
-        />
+          />
         <button
           onClick={addSweet}
           className="bg-green-600 text-white px-3 py-1"
-        >
+          >
           Add Sweet
         </button>
       </div>
@@ -96,13 +98,13 @@ export default function AdminPanel() {
               <button
                 onClick={() => restock(s.id)}
                 className="bg-blue-600 text-white px-2"
-              >
+                >
                 Restock
               </button>
               <button
                 onClick={() => remove(s.id)}
                 className="bg-red-600 text-white px-2"
-              >
+                >
                 Delete
               </button>
             </div>
@@ -110,5 +112,6 @@ export default function AdminPanel() {
         ))}
       </div>
     </div>
+        </>
   );
 }

@@ -2,7 +2,8 @@ import { createContext, useContext, useState } from "react";
 
 type AuthContextType = {
   token: string | null;
-  login: (token: string) => void;
+  role: string | null;
+  login: (token: string, role: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
 };
@@ -14,20 +15,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.getItem("token")
   );
 
-  const login = (token: string) => {
+  const [role, setRole] = useState<string | null>(
+    localStorage.getItem("role")
+  );
+
+  const login = (token: string, role: string) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("role", role);
     setToken(token);
+    setRole(role);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     setToken(null);
+    setRole(null);
   };
 
   return (
     <AuthContext.Provider
       value={{
         token,
+        role,                // ✅ FIXED
         login,
         logout,
         isAuthenticated: !!token,
