@@ -1,5 +1,7 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
+from app.services.sweet_service import search_sweets
 from app.schemas.sweet import SweetCreate, SweetUpdate, SweetResponse
 from app.services.sweet_service import (
     create_sweet,
@@ -68,3 +70,14 @@ def restock(
     user: User = Depends(get_current_user),
 ):
     return restock_sweet(db, sweet_id, amount, user)
+
+@router.get("/search", response_model=list[SweetResponse])
+def search(
+    name: Optional[str] = None,
+    category: Optional[str] = None,
+    price_min: Optional[float] = None,
+    price_max: Optional[float] = None,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    return search_sweets(db, name, category, price_min, price_max)

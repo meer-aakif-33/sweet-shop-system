@@ -1,3 +1,4 @@
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from app.models.sweet import Sweet
@@ -68,3 +69,26 @@ def restock_sweet(db: Session, sweet_id: str, amount: int, user: User):
     db.commit()
     db.refresh(sweet)
     return sweet
+
+def search_sweets(
+    db: Session,
+    name: str | None,
+    category: str | None,
+    price_min: float | None,
+    price_max: float | None,
+):
+    query = db.query(Sweet)
+
+    if name:
+        query = query.filter(Sweet.name.ilike(f"%{name}%"))
+
+    if category:
+        query = query.filter(Sweet.category == category)
+
+    if price_min is not None:
+        query = query.filter(Sweet.price >= price_min)
+
+    if price_max is not None:
+        query = query.filter(Sweet.price <= price_max)
+
+    return query.all()
