@@ -11,26 +11,39 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="flex items-center justify-between px-6 py-4 bg-blue-600 text-white">
-      <h1 className="text-lg font-bold">🍬 Sweet Shop</h1>
+    <nav className="bg-blue-600 text-white shadow">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo / Title */}
+        <h1 className="text-xl font-bold tracking-wide">
+          <span className="hidden sm:inline">🍬 </span>
+          Sweet Shop
+        </h1>
 
-<div className="flex items-center space-x-4">
-  <Link to="/" className="hover:underline">
-    Dashboard
-  </Link>
+        {/* Links */}
+        <div className="flex items-center gap-5">
+          <Link
+            to="/"
+            className="font-medium hover:text-blue-100 transition"
+          >
+            Dashboard
+          </Link>
 
-  {role === "ADMIN" && (
-    <span className="text-sm opacity-80">(Admin Mode)</span>
-  )}
+          {role === "ADMIN" && (
+            <span className="px-3 py-1 text-xs font-semibold
+                             bg-white text-blue-600 rounded-full">
+              ADMIN
+            </span>
+          )}
 
-  <button
-    onClick={handleLogout}
-    className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
-  >
-    Logout
-  </button>
-</div>
-
+          <button
+            onClick={handleLogout}
+            className="bg-white text-blue-600 px-4 py-1.5 rounded-lg
+                       font-medium hover:bg-blue-50 transition"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
     </nav>
   );
 }

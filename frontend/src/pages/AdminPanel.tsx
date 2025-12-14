@@ -30,8 +30,7 @@ export default function AdminPanel() {
 
   const addSweet = async () => {
     await api.post("/api/sweets", {
-      name: form.name,
-      category: form.category,
+      ...form,
       price: Number(form.price),
       quantity: Number(form.quantity),
     });
@@ -44,75 +43,99 @@ export default function AdminPanel() {
     loadSweets();
   };
 
-  const remove = async (id: string) => {
-    await api.delete(`/api/sweets/${id}`);
-    loadSweets();
-  };
+const remove = async (id: string) => {
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this sweet?"
+  );
+
+  if (!confirmed) return;
+
+  await api.delete(`/api/sweets/${id}`);
+  loadSweets();
+};
 
   return (
     <>
-          <Navbar />
-    <div className="p-4 space-y-4">
-      <h2 className="text-2xl font-bold">Admin Panel</h2>
+      <Navbar />
+      <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
+        <h2 className="text-2xl font-bold text-gray-800">Admin Panel</h2>
 
-      <div className="border p-4 space-y-2">
-        <h3 className="font-semibold">Add Sweet</h3>
-        <input
-          placeholder="Name"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          className="border p-1 w-full"
-          />
-        <input
-          placeholder="Category"
-          value={form.category}
-          onChange={(e) => setForm({ ...form, category: e.target.value })}
-          className="border p-1 w-full"
-          />
-        <input
-          placeholder="Price"
-          value={form.price}
-          onChange={(e) => setForm({ ...form, price: e.target.value })}
-          className="border p-1 w-full"
-        />
-        <input
-          placeholder="Quantity"
-          value={form.quantity}
-          onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-          className="border p-1 w-full"
-          />
-        <button
-          onClick={addSweet}
-          className="bg-green-600 text-white px-3 py-1"
-          >
-          Add Sweet
-        </button>
-      </div>
+        {/* Add Sweet Card */}
+        <div className="bg-white shadow rounded-xl p-5 space-y-3">
+          <h3 className="font-semibold text-lg">Add Sweet</h3>
 
-      <div className="space-y-2">
-        {sweets.map((s) => (
-          <div key={s.id} className="border p-2 flex justify-between">
-            <span>
-              {s.name} ({s.quantity})
-            </span>
-            <div className="space-x-2">
-              <button
-                onClick={() => restock(s.id)}
-                className="bg-blue-600 text-white px-2"
-                >
-                Restock
-              </button>
-              <button
-                onClick={() => remove(s.id)}
-                className="bg-red-600 text-white px-2"
-                >
-                Delete
-              </button>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input
+              placeholder="Name"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              className="border rounded-lg px-3 py-2"
+            />
+            <input
+              placeholder="Category"
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+              className="border rounded-lg px-3 py-2"
+            />
+            <input
+              placeholder="Price"
+              value={form.price}
+              onChange={(e) => setForm({ ...form, price: e.target.value })}
+              className="border rounded-lg px-3 py-2"
+            />
+            <input
+              placeholder="Quantity"
+              value={form.quantity}
+              onChange={(e) => setForm({ ...form, quantity: e.target.value })}
+              className="border rounded-lg px-3 py-2"
+            />
           </div>
-        ))}
+
+          <button
+            onClick={addSweet}
+            className="bg-green-600 hover:bg-green-700
+                       text-white px-4 py-2 rounded-lg transition"
+          >
+            Add Sweet
+          </button>
+        </div>
+
+        {/* Sweet List */}
+        <div className="bg-white shadow rounded-xl divide-y">
+          {sweets.map((s) => (
+            <div
+              key={s.id}
+              className="flex items-center justify-between p-4"
+            >
+              <div>
+                <p className="font-medium">
+                  {s.name}
+                </p>
+                <p className="text-sm text-gray-500">
+                  Qty: {s.quantity}
+                </p>
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => restock(s.id)}
+                  className="bg-blue-600 hover:bg-blue-700
+                             text-white px-3 py-1 rounded-md"
+                >
+                  Restock
+                </button>
+                <button
+                  onClick={() => remove(s.id)}
+                  className="bg-red-600 hover:bg-red-700
+                             text-white px-3 py-1 rounded-md"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-        </>
+    </>
   );
 }
