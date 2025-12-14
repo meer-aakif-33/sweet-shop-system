@@ -1,11 +1,21 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 
 from app.db.session import engine
 from app.db.base import Base
 from app.routers import auth, sweets
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup logic
+    Base.metadata.create_all(bind=engine)
+    yield
+    # Shutdown logic 
+
+
+app = FastAPI(lifespan=lifespan)
 
 # CORS
 app.add_middleware(
@@ -15,11 +25,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Create tables
-@app.on_event("startup")
-def on_startup():
-    Base.metadata.create_all(bind=engine)
 
 # Routers
 app.include_router(auth.router)
