@@ -1,3 +1,10 @@
+import sys
+from pathlib import Path
+
+# Fix Python path
+BACKEND_DIR = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BACKEND_DIR))
+
 def test_user_can_register(client):
     response = client.post(
         "/api/auth/register",

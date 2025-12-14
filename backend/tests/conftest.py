@@ -14,6 +14,8 @@ from app.main import app
 from app.db.base import Base
 from app.db.session import get_db
 
+
+# TEST DATABASE ONLY 
 TEST_DATABASE_URL = "sqlite:///./test.db"
 
 engine = create_engine(
@@ -24,19 +26,17 @@ engine = create_engine(
 TestingSessionLocal = sessionmaker(bind=engine)
 
 
-@pytest.fixture(scope="session", autouse=True)
-def setup_database():
+@pytest.fixture(autouse=True)
+def reset_database():
+    """
+    FULL isolation:
+    - Drop all tables
+    - Recreate all tables
+    Runs BEFORE every test
+    """
+    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     yield
-    Base.metadata.drop_all(bind=engine)
-
-
-@pytest.fixture(autouse=True)
-def clear_tables():
-    """Ensure clean DB state before each test"""
-    with engine.begin() as conn:
-        for table in reversed(Base.metadata.sorted_tables):
-            conn.execute(table.delete())
 
 
 @pytest.fixture()
